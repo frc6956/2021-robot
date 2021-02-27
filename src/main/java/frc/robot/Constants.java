@@ -63,10 +63,10 @@ public final class Constants {
 
   // USB
   public final class USB {
-      public static final int driveController = 0;
-      public static final int operatorController = 1;
-      public static final int driverJoyLeft = 2;
-      public static final int driverJoyRight = 3;
+    public static final int driveController = 0;
+    public static final int operatorController = 1;
+    public static final int driverJoyLeft = 2;
+    public static final int driverJoyRight = 3;
   }
 
   public static final class AutoConstants {

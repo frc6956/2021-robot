@@ -37,19 +37,21 @@ import java.nio.file.Path;
 import java.util.List;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and button mappings) should be declared here.
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a "declarative" paradigm, very little robot logic should
+ * actually be handled in the {@link Robot} periodic methods (other than the
+ * scheduler calls). Instead, the structure of the robot (including subsystems,
+ * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+    // The robot's subsystems
+    private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
-  // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  private final Joystick m_driverLeftJoystick = new Joystick(Constants.USB.driverJoyLeft);
-  private final Joystick m_driverRightJoystick = new Joystick(Constants.USB.driverJoyRight);
+    // The driver's controller
+    XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+    private final Joystick m_driverLeftJoystick = new Joystick(Constants.USB.driverJoyLeft);
+    private final Joystick m_driverRightJoystick = new Joystick(
+            Constants.USB.driverJoyRight);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -78,86 +80,67 @@ public class RobotContainer {
   private void configureButtonBindings() {
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    public Command getAutonomousCommand() {
 
-    // Create a voltage constraint to ensure we don't accelerate too fast
-    var autoVoltageConstraint =
-        new DifferentialDriveVoltageConstraint(
-            new SimpleMotorFeedforward(
-                DriveConstants.ksVolts,
-                DriveConstants.kvVoltSecondsPerMeter,
-                DriveConstants.kaVoltSecondsSquaredPerMeter),
-            DriveConstants.kDriveKinematics,
-            10);
+        // Create a voltage constraint to ensure we don't accelerate too fast
+        var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
+                new SimpleMotorFeedforward(DriveConstants.ksVolts, DriveConstants.kvVoltSecondsPerMeter,
+                        DriveConstants.kaVoltSecondsSquaredPerMeter),
+                DriveConstants.kDriveKinematics, 10);
 
-    // Create config for trajectory
-    TrajectoryConfig config =
-        new TrajectoryConfig(
-                AutoConstants.kMaxSpeedMetersPerSecond,
+        // Create config for trajectory
+        TrajectoryConfig config = new TrajectoryConfig(AutoConstants.kMaxSpeedMetersPerSecond,
                 AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-            // Add kinematics to ensure max speed is actually obeyed
-            .setKinematics(DriveConstants.kDriveKinematics)
-            // Apply the voltage constraint
-            .addConstraint(autoVoltageConstraint);
+                        // Add kinematics to ensure max speed is actually obeyed
+                        .setKinematics(DriveConstants.kDriveKinematics)
+                        // Apply the voltage constraint
+                        .addConstraint(autoVoltageConstraint);
 
-    // An example trajectory to follow.  All units in meters.
-    Trajectory exampleTrajectory =
-        TrajectoryGenerator.generateTrajectory(
-            // Start at the origin facing the +X direction
-            new Pose2d(0, 0, new Rotation2d(0)),
-            // Pass through these two interior waypoints, making an 's' curve path
-            List.of(new Translation2d(1, 1), new Translation2d(2, 0)),
-            // End 3 meters straight ahead of where we started, facing forward
-            new Pose2d(3, 1, new Rotation2d(0)),
-            // Pass config
-            config);
+        // An example trajectory to follow. All units in meters.
+        Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+                // Start at the origin facing the +X direction
+                new Pose2d(0, 0, new Rotation2d(0)),
+                // Pass through these two interior waypoints, making an 's' curve path
+                List.of(new Translation2d(1, 1), new Translation2d(2, 0)),
+                // End 3 meters straight ahead of where we started, facing forward
+                new Pose2d(3, 1, new Rotation2d(0)),
+                // Pass config
+                config);
 
-    Trajectory poseTraj = 
-    TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        List.of( new Pose2d(0, 1.5, new Rotation2d(0)), 
-        new Pose2d(2, 1.5, new Rotation2d(0)),
-        new Pose2d(2.5, 2, new Rotation2d(1.57)),
-        new Pose2d(2, 2.5, new Rotation2d(1.57*2)),
-        new Pose2d(1.5, 2, new Rotation2d(1.57*3)),
-        new Pose2d(1.5, 0, new Rotation2d(1.57*3))),
-        config);
-    
-    String trajectoryJSON = "paths/SlalomPath.wpilib.json";
-    Trajectory slalom = new Trajectory();
-    try {
-        Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-        slalom = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-    } catch (IOException ex) {
-        DriverStation.reportError("Unstable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+        Trajectory poseTraj = TrajectoryGenerator.generateTrajectory(
+                // Start at the origin facing the +X direction
+                List.of(new Pose2d(0, 1.5, new Rotation2d(0)), new Pose2d(2, 1.5, new Rotation2d(0)),
+                        new Pose2d(2.5, 2, new Rotation2d(1.57)), new Pose2d(2, 2.5, new Rotation2d(1.57 * 2)),
+                        new Pose2d(1.5, 2, new Rotation2d(1.57 * 3)), new Pose2d(1.5, 0, new Rotation2d(1.57 * 3))),
+                config);
+
+        String trajectoryJSON = "paths/SlalomPath.wpilib.json";
+        Trajectory slalom = new Trajectory();
+        try {
+            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+            slalom = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+        } catch (IOException ex) {
+            DriverStation.reportError("Unstable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+        }
+
+        RamseteCommand ramseteCommand = new RamseteCommand(poseTraj, m_robotDrive::getPose,
+                new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
+                new SimpleMotorFeedforward(DriveConstants.ksVolts, DriveConstants.kvVoltSecondsPerMeter,
+                        DriveConstants.kaVoltSecondsSquaredPerMeter),
+                DriveConstants.kDriveKinematics, m_robotDrive::getWheelSpeeds,
+                new PIDController(DriveConstants.kPDriveVel, 0, 0), new PIDController(DriveConstants.kPDriveVel, 0, 0),
+                // RamseteCommand passes volts to the callback
+                m_robotDrive::tankDriveVolts, m_robotDrive);
+
+        // Reset odometry to the starting pose of the trajectory.
+        m_robotDrive.resetOdometry(poseTraj.getInitialPose());
+
+        // Run path following command, then stop at the end.
+        return ramseteCommand.andThen(() -> m_robotDrive.tankDriveVolts(0, 0));
     }
-
-    RamseteCommand ramseteCommand =
-        new RamseteCommand(
-            poseTraj,
-            m_robotDrive::getPose,
-            new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
-            new SimpleMotorFeedforward(
-                DriveConstants.ksVolts,
-                DriveConstants.kvVoltSecondsPerMeter,
-                DriveConstants.kaVoltSecondsSquaredPerMeter),
-            DriveConstants.kDriveKinematics,
-            m_robotDrive::getWheelSpeeds,
-            new PIDController(DriveConstants.kPDriveVel, 0, 0),
-            new PIDController(DriveConstants.kPDriveVel, 0, 0),
-            // RamseteCommand passes volts to the callback
-            m_robotDrive::tankDriveVolts,
-            m_robotDrive);
-
-    // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(poseTraj.getInitialPose());
-
-    // Run path following command, then stop at the end.
-    return ramseteCommand.andThen(() -> m_robotDrive.tankDriveVolts(0, 0));
-  }
 }

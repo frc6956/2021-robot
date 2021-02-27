@@ -38,7 +38,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_leftSRX = new WPI_TalonSRX(Constants.CAN.leftDriveMotor);
     m_leftSPX1 = new WPI_VictorSPX(Constants.CAN.leftDriveSPX1);
     m_leftSPX2 = new WPI_VictorSPX(Constants.CAN.leftDriveSPX2);
-    
+
     m_rightSRX = new WPI_TalonSRX(Constants.CAN.rightDriveMotor);
     m_rightSPX1 = new WPI_VictorSPX(Constants.CAN.rightDriveSPX1);
     m_rightSPX2 = new WPI_VictorSPX(Constants.CAN.rightDriveSPX2);
@@ -60,11 +60,13 @@ public class DriveSubsystem extends SubsystemBase {
     m_drive.setRightSideInverted(false);
 
     m_leftSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-   // m_leftSRX.setSensorPhase(true);
+    // m_leftSRX.setSensorPhase(true);
     m_rightSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
     // Sets the distance per pulse for the encoders
-    /*m_leftSRX.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
-    m_rightEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);*/
+    /*
+     * m_leftSRX.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
+     * m_rightEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
+     */
 
     resetEncoders();
     m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
@@ -73,9 +75,9 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
-    m_odometry.update(
-        m_gyro.getRotation2d(), m_leftSRX.getSelectedSensorPosition()  / Constants.DriveConstants.ticksPerMeter
-        , m_rightSRX.getSelectedSensorPosition() / Constants.DriveConstants.ticksPerMeter);
+    m_odometry.update(m_gyro.getRotation2d(),
+        m_leftSRX.getSelectedSensorPosition() / Constants.DriveConstants.ticksPerMeter,
+        m_rightSRX.getSelectedSensorPosition() / Constants.DriveConstants.ticksPerMeter);
   }
 
   /**
@@ -93,8 +95,9 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The current wheel speeds.
    */
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(m_leftSRX.getSelectedSensorVelocity()  / Constants.DriveConstants.ticksPerMeter
-    , m_rightSRX.getSelectedSensorVelocity() / Constants.DriveConstants.ticksPerMeter);
+    return new DifferentialDriveWheelSpeeds(
+        m_leftSRX.getSelectedSensorVelocity() / Constants.DriveConstants.ticksPerMeter,
+        m_rightSRX.getSelectedSensorVelocity() / Constants.DriveConstants.ticksPerMeter);
   }
 
   /**
@@ -120,7 +123,7 @@ public class DriveSubsystem extends SubsystemBase {
   /**
    * Drives the robot using tank controls.
    *
-   * @param left the commanded left movement
+   * @param left  the commanded left movement
    * @param right the commanded right movement
    */
   public void tankDrive(double left, double right) {
@@ -130,7 +133,7 @@ public class DriveSubsystem extends SubsystemBase {
   /**
    * Controls the left and right sides of the drive directly with voltages.
    *
-   * @param leftVolts the commanded left output
+   * @param leftVolts  the commanded left output
    * @param rightVolts the commanded right output
    */
   public void tankDriveVolts(double leftVolts, double rightVolts) {
@@ -144,11 +147,10 @@ public class DriveSubsystem extends SubsystemBase {
     m_leftSRX.setSelectedSensorPosition(0);
     m_rightSRX.setSelectedSensorPosition(0);
     resetDistanceTravelled();
+
   }
 
-  /**
-   * Sets the max output of the drive. Useful for scaling the drive to drive more slowly.
-   *
+  /*
    * @param maxOutput the maximum output to which the drive will be constrained
    */
   public void setMaxOutput(double maxOutput) {
@@ -177,6 +179,7 @@ public class DriveSubsystem extends SubsystemBase {
   public double getTurnRate() {
     return -m_gyro.getRate();
   }
+
   public double getDistanceTravelled() {
     return getRawDistanceTravelled() - zeroDistance;
   }
@@ -187,6 +190,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void resetDistanceTravelled() {
     zeroDistance = getRawDistanceTravelled();
   }
+
   protected double getRawDistanceTravelled() {
     double total = m_leftSRX.getSelectedSensorPosition(0) / Constants.DriveConstants.ticksPerMeter;
     total += m_rightSRX.getSelectedSensorPosition(0) / Constants.DriveConstants.ticksPerMeter;
