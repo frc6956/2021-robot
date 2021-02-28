@@ -5,19 +5,21 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.*;
-import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.*;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class DriveSubsystem extends SubsystemBase {
+public class Drivetrain extends SubsystemBase {
   private double zeroDistance = 0;
   private final DifferentialDrive m_drive;
+  private final DoubleSolenoid shifter = new DoubleSolenoid(Constants.PCM.driveLow, Constants.PCM.driveHigh);
 
   private final WPI_TalonSRX m_leftSRX;
   private final WPI_TalonSRX m_rightSRX;
@@ -28,13 +30,18 @@ public class DriveSubsystem extends SubsystemBase {
   private final WPI_VictorSPX m_leftSPX2;
   private final WPI_VictorSPX m_rightSPX2;
 
-  private GyroSubsystem m_gyro = new GyroSubsystem();
+  private Gyro m_gyro;
+  
+  private boolean reverse = false;
+  private boolean low = true;
 
   // Odometry class for tracking robot pose
   private final DifferentialDriveOdometry m_odometry;
 
   /** Creates a new DriveSubsystem. */
-  public DriveSubsystem() {
+  public Drivetrain(Gyro gyro) {
+    m_gyro = gyro;
+    
     m_leftSRX = new WPI_TalonSRX(Constants.CAN.leftDriveMotor);
     m_leftSPX1 = new WPI_VictorSPX(Constants.CAN.leftDriveSPX1);
     m_leftSPX2 = new WPI_VictorSPX(Constants.CAN.leftDriveSPX2);
@@ -62,9 +69,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_leftSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
    // m_leftSRX.setSensorPhase(true);
     m_rightSRX.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-    // Sets the distance per pulse for the encoders
-    /*m_leftSRX.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
-    m_rightEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);*/
+    
 
     resetEncoders();
     m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
@@ -109,12 +114,31 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   /**
+   * Reverses the drivetrain
+   * @param reverse Reverse the drivetrain
+   */
+  public void reverse(final boolean reverse) {
+    this.reverse = reverse;
+  }
+
+  /**
+   * Checks if the drivetrain is reversed
+   * @return True if the drivetrain is reversed
+   */
+  public boolean isReversed() {
+    return reverse;
+  }
+
+  /**
    * Drives the robot using arcade controls.
    *
    * @param fwd the commanded forward movement
    * @param rot the commanded rotation
    */
   public void arcadeDrive(double fwd, double rot) {
+    if (reverse) {
+      fwd = -fwd;
+    }
     m_drive.arcadeDrive(fwd, rot);
   }
 
@@ -125,7 +149,22 @@ public class DriveSubsystem extends SubsystemBase {
    * @param right the commanded right movement
    */
   public void tankDrive(double left, double right) {
-    m_drive.tankDrive(left, right);
+    tankDrive(left, right, true);
+  }
+
+  /**
+   * Drives the robot using tank controls.
+   *
+   * @param left  the commanded left movement
+   * @param right the commanded right movement
+   * @param squareInputs square the input values
+   */
+  public void tankDrive(final double left, final double right, boolean squareInputs) {
+    if (reverse) {
+      m_drive.tankDrive(-right, -left, squareInputs);
+    } else {
+      m_drive.tankDrive(left, right, squareInputs);
+    }
   }
 
   /**
@@ -194,5 +233,25 @@ public class DriveSubsystem extends SubsystemBase {
     double total = m_leftSRX.getSelectedSensorPosition(0) / Constants.DriveConstants.ticksPerMeter;
     total += m_rightSRX.getSelectedSensorPosition(0) / Constants.DriveConstants.ticksPerMeter;
     return (total / 2);
+  }
+
+  /**
+   * Sets the robot to low gear for a 2 speed gearbox
+   */
+  public void lowGear() {
+		if (shifter.get() != DoubleSolenoid.Value.kForward) {
+			shifter.set(DoubleSolenoid.Value.kForward);
+    }
+    low = true;
+  }
+  
+  /**
+   * Sets the robot to high gear for a 2 speed gearbox
+   */
+  public void highGear() {
+		if (shifter.get() != DoubleSolenoid.Value.kReverse) {
+			shifter.set(DoubleSolenoid.Value.kReverse);
+    }
+    low = false;
   }
 }

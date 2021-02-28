@@ -8,14 +8,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 /**
  * This class provides an interface for the Pigeon Gyro
  */
-public class GyroSubsystem extends SubsystemBase implements Gyro {
+public class PigeonGyro extends SubsystemBase implements Gyro {
 
 	private PigeonIMU pigeon = new PigeonIMU(0);
 	double zeroAngle;
 	/**
 	 * this is the constructor of the class
 	 */
-	public GyroSubsystem() {
+	public PigeonGyro() {
 		reset();
 	}
 	
