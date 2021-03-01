@@ -96,12 +96,12 @@ public final class Constants {
 
     // From old code
     public static final int kTicksPerRev = 4096;
-    public static final double kWheelCircumference = .2 * Math.PI;
+    public static final double kWheelCircumference = .18 * Math.PI;
     public static final double ticksPerMeter = kTicksPerRev / kWheelCircumference;
   }
 
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 3;
+    public static final double kMaxSpeedMetersPerSecond = 1.25;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
 
     // Reasonable baseline values for a RAMSETE follower in units of meters and
