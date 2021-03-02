@@ -83,7 +83,8 @@ public final class Constants {
     public static final boolean kLeftEncoderReversed = false;
     public static final boolean kRightEncoderReversed = true;
 
-    public static final double kTrackwidthMeters = 1.0744786401204909 / 2;
+    //public static final double kTrackwidthMeters = 1.0744786401204909;
+    public static final double kTrackwidthMeters = 0.95;
     public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(
         kTrackwidthMeters);
 
@@ -94,14 +95,16 @@ public final class Constants {
     // Example value only - as above, this must be tuned for your drive!
     public static final double kPDriveVel = 1.79;
 
-    // From old code
+    // Encoder conversion
     public static final int kTicksPerRev = 4096;
-    public static final double kWheelCircumference = .18 * Math.PI;
-    public static final double ticksPerMeter = kTicksPerRev / kWheelCircumference;
+    public static final double kLeftWheelDiameter = 0.181;
+    public static final double kRightWheelDiameter = 0.178;
+    public static final double ticksPerMeterLeft = kTicksPerRev / (kLeftWheelDiameter * Math.PI);
+    public static final double ticksPerMeterRight = kTicksPerRev / (kRightWheelDiameter * Math.PI);
   }
 
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 1.25;
+    public static final double kMaxSpeedMetersPerSecond = 2;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
 
     // Reasonable baseline values for a RAMSETE follower in units of meters and

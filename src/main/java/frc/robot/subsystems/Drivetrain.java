@@ -79,8 +79,8 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     // Update the odometry in the periodic block
     m_odometry.update(m_gyro.getRotation2d(),
-        m_leftSRX.getSelectedSensorPosition() / Constants.DriveConstants.ticksPerMeter,
-        m_rightSRX.getSelectedSensorPosition() / Constants.DriveConstants.ticksPerMeter);
+        m_leftSRX.getSelectedSensorPosition() / Constants.DriveConstants.ticksPerMeterLeft,
+        m_rightSRX.getSelectedSensorPosition() / Constants.DriveConstants.ticksPerMeterRight);
   }
 
   /**
@@ -99,8 +99,8 @@ public class Drivetrain extends SubsystemBase {
    */
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     return new DifferentialDriveWheelSpeeds(
-        m_leftSRX.getSelectedSensorVelocity() / Constants.DriveConstants.ticksPerMeter,
-        m_rightSRX.getSelectedSensorVelocity() / Constants.DriveConstants.ticksPerMeter);
+        m_leftSRX.getSelectedSensorVelocity() / Constants.DriveConstants.ticksPerMeterLeft,
+        m_rightSRX.getSelectedSensorVelocity() / Constants.DriveConstants.ticksPerMeterRight);
   }
 
   /**
@@ -230,8 +230,8 @@ public class Drivetrain extends SubsystemBase {
   }
   
   protected double getRawDistanceTravelled() {
-    double total = m_leftSRX.getSelectedSensorPosition(0) / Constants.DriveConstants.ticksPerMeter;
-    total += m_rightSRX.getSelectedSensorPosition(0) / Constants.DriveConstants.ticksPerMeter;
+    double total = m_leftSRX.getSelectedSensorPosition(0) / Constants.DriveConstants.ticksPerMeterLeft;
+    total += m_rightSRX.getSelectedSensorPosition(0) / Constants.DriveConstants.ticksPerMeterRight;
     return (total / 2);
   }
 

@@ -182,8 +182,7 @@ public class RobotContainer {
   private Pose2d fieldPointsToMeters(double xFieldPoints, double yFieldPoints, double rotationDegrees) {
       double xMeters = xFieldPoints * 30 * 0.0254;
       double yMeters = yFieldPoints * 30 * 0.0254;
-      double rotationRadians = rotationDegrees * Math.PI / 180;
-      return new Pose2d(xMeters, yMeters, new Rotation2d(rotationRadians));
+      return new Pose2d(xMeters, yMeters, Rotation2d.fromDegrees(rotationDegrees));
   }
 
   /**
@@ -213,29 +212,6 @@ public class RobotContainer {
             // Apply the voltage constraint
             .addConstraint(autoVoltageConstraint);
 
-    // An example trajectory to follow.  All units in meters.
-    Trajectory exampleTrajectory =
-        TrajectoryGenerator.generateTrajectory(
-            // Start at the origin facing the +X direction
-            new Pose2d(0, 0, new Rotation2d(0)),
-            // Pass through these two interior waypoints, making an 's' curve path
-            List.of(new Translation2d(1, 1), new Translation2d(2, 0)),
-            // End 3 meters straight ahead of where we started, facing forward
-            new Pose2d(3, 1, new Rotation2d(0)),
-            // Pass config
-            config);
-
-    Trajectory poseTraj = 
-    TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        List.of( new Pose2d(0, 1.5, new Rotation2d(0)), 
-        new Pose2d(2, 1.5, new Rotation2d(0)),
-        new Pose2d(2.5, 2, new Rotation2d(1.57)),
-        new Pose2d(2, 2.5, new Rotation2d(1.57*2)),
-        new Pose2d(1.5, 2, new Rotation2d(1.57*3)),
-        new Pose2d(1.5, 0, new Rotation2d(1.57*3))),
-        config);
-
     Trajectory slalomWaypoints = 
     TrajectoryGenerator.generateTrajectory(
         // Start at the origin facing the +X direction
@@ -245,11 +221,11 @@ public class RobotContainer {
         fieldPointsToMeters(3, 2, 45),
         fieldPointsToMeters(4, 3, 0),
         fieldPointsToMeters(8, 3, 0),
-        fieldPointsToMeters(9, 2, 315),
+        fieldPointsToMeters(8.5, 2, 315),
         fieldPointsToMeters(10, 1, 0),
         fieldPointsToMeters(11, 2, 90),
         fieldPointsToMeters(10, 3, 180),
-        fieldPointsToMeters(9, 2, 225),
+        fieldPointsToMeters(9.5, 2, 270),
         fieldPointsToMeters(8, 1, 180),
         fieldPointsToMeters(4, 1, 180),
         fieldPointsToMeters(3, 2, 135),
@@ -257,14 +233,14 @@ public class RobotContainer {
         fieldPointsToMeters(1, 3, 180)),
         config);
     
-    String trajectoryJSON = "paths/SlalomPath.wpilib.json";
+    /*String trajectoryJSON = "paths/SlalomPath.wpilib.json";
     Trajectory slalom = new Trajectory();
     try {
         Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
         slalom = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
     } catch (IOException ex) {
         DriverStation.reportError("Unstable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-    }
+    }*/
 
     Trajectory traj = slalomWaypoints;
 
