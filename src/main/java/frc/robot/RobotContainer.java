@@ -217,18 +217,18 @@ public class RobotContainer {
         // Start at the origin facing the +X direction
         List.of(
         fieldPointsToMeters(1.5, 1, 0),
-        fieldPointsToMeters(2, 1, 0),
+        fieldPointsToMeters(2.2, 1, 0),
         fieldPointsToMeters(3, 2, 45),
         fieldPointsToMeters(4, 3, 0),
         fieldPointsToMeters(8, 3, 0),
-        fieldPointsToMeters(8.5, 2, 315),
+        fieldPointsToMeters(9, 2, 315),
         fieldPointsToMeters(10, 1, 0),
         fieldPointsToMeters(11, 2, 90),
         fieldPointsToMeters(10, 3, 180),
-        fieldPointsToMeters(9.5, 2, 270),
+        fieldPointsToMeters(9, 2, 270),
         fieldPointsToMeters(8, 1, 180),
         fieldPointsToMeters(4, 1, 180),
-        fieldPointsToMeters(3, 2, 135),
+        fieldPointsToMeters(3, 2, 90),
         fieldPointsToMeters(2, 3, 180),
         fieldPointsToMeters(1, 3, 180)),
         config);
