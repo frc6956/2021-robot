@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -81,6 +82,8 @@ public class Drivetrain extends SubsystemBase {
     m_odometry.update(m_gyro.getRotation2d(),
         m_leftSRX.getSelectedSensorPosition() / Constants.DriveConstants.ticksPerMeterLeft,
         m_rightSRX.getSelectedSensorPosition() / Constants.DriveConstants.ticksPerMeterRight);
+        SmartDashboard.putNumber("Left Encoder", m_leftSRX.getSelectedSensorPosition());
+        SmartDashboard.putNumber("Right Encoder", m_rightSRX.getSelectedSensorPosition());
   }
 
   /**

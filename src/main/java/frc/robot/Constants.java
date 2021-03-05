@@ -97,8 +97,8 @@ public final class Constants {
 
     // Encoder conversion
     public static final int kTicksPerRev = 4096;
-    public static final double kLeftWheelDiameter = 0.181;
-    public static final double kRightWheelDiameter = 0.178;
+    public static final double kLeftWheelDiameter = 0.186;
+    public static final double kRightWheelDiameter = 0.184;
     public static final double ticksPerMeterLeft = kTicksPerRev / (kLeftWheelDiameter * Math.PI);
     public static final double ticksPerMeterRight = kTicksPerRev / (kRightWheelDiameter * Math.PI);
   }

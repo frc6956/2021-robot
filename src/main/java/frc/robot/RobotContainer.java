@@ -37,6 +37,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
+import javax.sql.rowset.FilteredRowSet;
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -212,7 +214,7 @@ public class RobotContainer {
             // Apply the voltage constraint
             .addConstraint(autoVoltageConstraint);
 
-    Trajectory slalomWaypoints = 
+    Trajectory slalomPath = 
     TrajectoryGenerator.generateTrajectory(
         // Start at the origin facing the +X direction
         List.of(
@@ -233,6 +235,100 @@ public class RobotContainer {
         fieldPointsToMeters(1, 3, 180)),
         config);
     
+
+    Trajectory barrelRacingPath = 
+    TrajectoryGenerator.generateTrajectory(
+        // Start at the origin facing the +X direction
+        List.of(
+        fieldPointsToMeters(1, 3, 0),
+        fieldPointsToMeters(5, 3, 0),
+        fieldPointsToMeters(6, 2, 270),
+        fieldPointsToMeters(5, 1, 180),
+        fieldPointsToMeters(4, 2, 90),
+        fieldPointsToMeters(5, 3, 0),
+        fieldPointsToMeters(8, 3, 0),
+        fieldPointsToMeters(9, 4, 90),
+        fieldPointsToMeters(8, 5, 180),
+        fieldPointsToMeters(7, 4, 270),
+        fieldPointsToMeters(7, 3, 315),
+        fieldPointsToMeters(8, 2, 315),
+        fieldPointsToMeters(10, 1, 0),
+        fieldPointsToMeters(11, 2, 90),
+        fieldPointsToMeters(10, 3, 180),
+        fieldPointsToMeters(1, 3, 180)
+        ),
+        config);
+
+        Trajectory bouncePath = 
+        TrajectoryGenerator.generateTrajectory(
+            // Start at the origin facing the +X direction
+            List.of(
+            fieldPointsToMeters(1, 3, 0),
+            fieldPointsToMeters(2, 3, 0),
+            fieldPointsToMeters(3, 4, 90),
+            fieldPointsToMeters(3, 5, 90),
+            fieldPointsToMeters(3, 5, 270),
+            fieldPointsToMeters(3, 4, 270),
+            fieldPointsToMeters(4, 1.5, 315),
+            fieldPointsToMeters(5, 1, 0),
+            fieldPointsToMeters(6, 2, 90),
+            fieldPointsToMeters(6, 5, 90),
+            fieldPointsToMeters(6, 5, 270),
+            fieldPointsToMeters(6, 2, 270),
+            fieldPointsToMeters(7, 1, 0),
+            fieldPointsToMeters(8, 1, 0),
+            fieldPointsToMeters(9, 2, 90),
+            fieldPointsToMeters(9, 5, 90),
+            fieldPointsToMeters(9, 5, 270),
+            fieldPointsToMeters(9, 4, 270),
+            fieldPointsToMeters(10, 3, 0),
+            fieldPointsToMeters(11, 3, 0)
+            ),
+            config);
+
+            Trajectory lightspeedCircuitPath = 
+        TrajectoryGenerator.generateTrajectory(
+            // Start at the origin facing the +X direction
+            // Might not be used; the lightspeed Circuit Path is supposed to be maually driven
+            List.of(
+            fieldPointsToMeters(2, 9, 90),
+            fieldPointsToMeters(2, 4, 90),
+            fieldPointsToMeters(3, 5, 0),
+            fieldPointsToMeters(4, 5, 0),
+            fieldPointsToMeters(5, 4, 270),
+            fieldPointsToMeters(6, 3, 0),
+            fieldPointsToMeters(7, 3, 0),
+            fieldPointsToMeters(8, 4, 90),
+            fieldPointsToMeters(9, 5, 0),
+            fieldPointsToMeters(10, 4, 270),
+            fieldPointsToMeters(11, 3, 270),
+            fieldPointsToMeters(11, 2, 270),
+            fieldPointsToMeters(10, 1, 180),
+            fieldPointsToMeters(6, 1, 180),
+            fieldPointsToMeters(5, 2, 90),
+            fieldPointsToMeters(4, 3, 180),
+            fieldPointsToMeters(3, 3, 180),
+            fieldPointsToMeters(2, 4, 90),
+            fieldPointsToMeters(3, 5, 0),
+            fieldPointsToMeters(4, 5, 0),
+            fieldPointsToMeters(5, 4, 270),
+            fieldPointsToMeters(6, 3, 0),
+            fieldPointsToMeters(7, 3, 0),
+            fieldPointsToMeters(8, 4, 90),
+            fieldPointsToMeters(9, 5, 0),
+            fieldPointsToMeters(10, 4, 270),
+            fieldPointsToMeters(11, 3, 270),
+            fieldPointsToMeters(11, 2, 270),
+            fieldPointsToMeters(10, 1, 180),
+            fieldPointsToMeters(6, 1, 180),
+            fieldPointsToMeters(5, 2, 90),
+            fieldPointsToMeters(4, 3, 180),
+            fieldPointsToMeters(3, 3, 180),
+            fieldPointsToMeters(2, 2, 270),
+            fieldPointsToMeters(2, 1, 270)
+            ),
+            config);
+
     /*String trajectoryJSON = "paths/SlalomPath.wpilib.json";
     Trajectory slalom = new Trajectory();
     try {
@@ -242,7 +338,7 @@ public class RobotContainer {
         DriverStation.reportError("Unstable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
     }*/
 
-    Trajectory traj = slalomWaypoints;
+    Trajectory traj = bouncePath;
 
     RamseteCommand ramseteCommand =
         new RamseteCommand(
@@ -267,4 +363,11 @@ public class RobotContainer {
     // Run path following command, then stop at the end.
     return ramseteCommand.andThen(() -> m_drivetrain.tankDriveVolts(0, 0));
   }
+
+  public void resetEncoders() {
+    m_drivetrain.resetEncoders();
+  }
 }
+
+
+
