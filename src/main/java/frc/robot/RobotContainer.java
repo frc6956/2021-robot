@@ -206,13 +206,23 @@ public class RobotContainer {
 
     // Create config for trajectory
     TrajectoryConfig config =
+    new TrajectoryConfig(
+            AutoConstants.kMaxSpeedMetersPerSecond,
+            AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+        // Add kinematics to ensure max speed is actually obeyed
+        .setKinematics(DriveConstants.kDriveKinematics)
+        // Apply the voltage constraint
+        .addConstraint(autoVoltageConstraint);
+
+    TrajectoryConfig configReverse =
         new TrajectoryConfig(
                 AutoConstants.kMaxSpeedMetersPerSecond,
                 AutoConstants.kMaxAccelerationMetersPerSecondSquared)
             // Add kinematics to ensure max speed is actually obeyed
             .setKinematics(DriveConstants.kDriveKinematics)
             // Apply the voltage constraint
-            .addConstraint(autoVoltageConstraint);
+            .addConstraint(autoVoltageConstraint)
+            .setReversed(true);
 
     Trajectory slalomPath = 
     TrajectoryGenerator.generateTrajectory(
@@ -259,75 +269,156 @@ public class RobotContainer {
         ),
         config);
 
-        Trajectory bouncePath = 
-        TrajectoryGenerator.generateTrajectory(
-            // Start at the origin facing the +X direction
-            List.of(
-            fieldPointsToMeters(1, 3, 0),
-            fieldPointsToMeters(2, 3, 0),
-            fieldPointsToMeters(3, 4, 90),
-            fieldPointsToMeters(3, 5, 90),
-            fieldPointsToMeters(3, 5, 270),
-            fieldPointsToMeters(3, 4, 270),
-            fieldPointsToMeters(4, 1.5, 315),
-            fieldPointsToMeters(5, 1, 0),
-            fieldPointsToMeters(6, 2, 90),
-            fieldPointsToMeters(6, 5, 90),
-            fieldPointsToMeters(6, 5, 270),
-            fieldPointsToMeters(6, 2, 270),
-            fieldPointsToMeters(7, 1, 0),
-            fieldPointsToMeters(8, 1, 0),
-            fieldPointsToMeters(9, 2, 90),
-            fieldPointsToMeters(9, 5, 90),
-            fieldPointsToMeters(9, 5, 270),
-            fieldPointsToMeters(9, 4, 270),
-            fieldPointsToMeters(10, 3, 0),
-            fieldPointsToMeters(11, 3, 0)
-            ),
-            config);
+    Trajectory bouncePath1 = 
+    TrajectoryGenerator.generateTrajectory(
+        // Start at the origin facing the +X direction
+        List.of(
+        fieldPointsToMeters(1, 3, 0),
+        fieldPointsToMeters(2, 3, 0),
+        fieldPointsToMeters(3, 4, 90),
+        fieldPointsToMeters(3, 5, 90)/*,
+        fieldPointsToMeters(3, 5, 270),
+        fieldPointsToMeters(3, 4, 270),
+        fieldPointsToMeters(4, 1.5, 315),
+        fieldPointsToMeters(5, 1, 0),
+        fieldPointsToMeters(6, 2, 90),
+        fieldPointsToMeters(6, 5, 90),
+        fieldPointsToMeters(6, 5, 270),
+        fieldPointsToMeters(6, 2, 270),
+        fieldPointsToMeters(7, 1, 0),
+        fieldPointsToMeters(8, 1, 0),
+        fieldPointsToMeters(9, 2, 90),
+        fieldPointsToMeters(9, 5, 90),
+        fieldPointsToMeters(9, 5, 270),
+        fieldPointsToMeters(9, 4, 270),
+        fieldPointsToMeters(10, 3, 0),
+        fieldPointsToMeters(11, 3, 0)*/
+        ),
+        config);
 
-            Trajectory lightspeedCircuitPath = 
-        TrajectoryGenerator.generateTrajectory(
-            // Start at the origin facing the +X direction
-            // Might not be used; the lightspeed Circuit Path is supposed to be maually driven
-            List.of(
-            fieldPointsToMeters(2, 9, 90),
-            fieldPointsToMeters(2, 4, 90),
-            fieldPointsToMeters(3, 5, 0),
-            fieldPointsToMeters(4, 5, 0),
-            fieldPointsToMeters(5, 4, 270),
-            fieldPointsToMeters(6, 3, 0),
-            fieldPointsToMeters(7, 3, 0),
-            fieldPointsToMeters(8, 4, 90),
-            fieldPointsToMeters(9, 5, 0),
-            fieldPointsToMeters(10, 4, 270),
-            fieldPointsToMeters(11, 3, 270),
-            fieldPointsToMeters(11, 2, 270),
-            fieldPointsToMeters(10, 1, 180),
-            fieldPointsToMeters(6, 1, 180),
-            fieldPointsToMeters(5, 2, 90),
-            fieldPointsToMeters(4, 3, 180),
-            fieldPointsToMeters(3, 3, 180),
-            fieldPointsToMeters(2, 4, 90),
-            fieldPointsToMeters(3, 5, 0),
-            fieldPointsToMeters(4, 5, 0),
-            fieldPointsToMeters(5, 4, 270),
-            fieldPointsToMeters(6, 3, 0),
-            fieldPointsToMeters(7, 3, 0),
-            fieldPointsToMeters(8, 4, 90),
-            fieldPointsToMeters(9, 5, 0),
-            fieldPointsToMeters(10, 4, 270),
-            fieldPointsToMeters(11, 3, 270),
-            fieldPointsToMeters(11, 2, 270),
-            fieldPointsToMeters(10, 1, 180),
-            fieldPointsToMeters(6, 1, 180),
-            fieldPointsToMeters(5, 2, 90),
-            fieldPointsToMeters(4, 3, 180),
-            fieldPointsToMeters(3, 3, 180),
-            fieldPointsToMeters(2, 2, 270),
-            fieldPointsToMeters(2, 1, 270)
-            ),
-            config);
+    Trajectory bouncePath2 = 
+    TrajectoryGenerator.generateTrajectory(
+        // Start at the origin facing the +X direction
+        List.of(
+        /*fieldPointsToMeters(1, 3, 0),
+        fieldPointsToMeters(2, 3, 0),
+        fieldPointsToMeters(3, 4, 90),
+        fieldPointsToMeters(3, 5, 90),*/
+        fieldPointsToMeters(3, 4, 90),
+        fieldPointsToMeters(4, 2, 90),
+        fieldPointsToMeters(5, 1, 180),
+        fieldPointsToMeters(6, 2, 270),
+        fieldPointsToMeters(6, 5, 270)/*,
+        fieldPointsToMeters(6, 5, 270),
+        fieldPointsToMeters(6, 2, 270),
+        fieldPointsToMeters(7, 1, 0),
+        fieldPointsToMeters(8, 1, 0),
+        fieldPointsToMeters(9, 2, 90),
+        fieldPointsToMeters(9, 5, 90),
+        fieldPointsToMeters(9, 5, 270),
+        fieldPointsToMeters(9, 4, 270),
+        fieldPointsToMeters(10, 3, 0),
+        fieldPointsToMeters(11, 3, 0)*/
+        ),
+        configReverse);
+        
+    Trajectory bouncePath3 = 
+    TrajectoryGenerator.generateTrajectory(
+        // Start at the origin facing the +X direction
+        List.of(
+        /*fieldPointsToMeters(1, 3, 0),
+        fieldPointsToMeters(2, 3, 0),
+        fieldPointsToMeters(3, 4, 90),
+        fieldPointsToMeters(3, 5, 90),
+        fieldPointsToMeters(3, 5, 270),
+        fieldPointsToMeters(3, 4, 270),
+        fieldPointsToMeters(4, 1.5, 315),
+        fieldPointsToMeters(5, 1, 0),
+        fieldPointsToMeters(6, 2, 90),
+        fieldPointsToMeters(6, 5, 90),*/
+        fieldPointsToMeters(6, 5, 270),
+        fieldPointsToMeters(6, 2, 270),
+        fieldPointsToMeters(7, 1, 0),
+        fieldPointsToMeters(8, 1, 0),
+        fieldPointsToMeters(9, 2, 90),
+        fieldPointsToMeters(9, 5, 90)/*,
+        fieldPointsToMeters(9, 5, 270),
+        fieldPointsToMeters(9, 4, 270),
+        fieldPointsToMeters(10, 3, 0),
+        fieldPointsToMeters(11, 3, 0)*/
+        ),
+        config);
+
+    Trajectory bouncePath4 = 
+    TrajectoryGenerator.generateTrajectory(
+        // Start at the origin facing the +X direction
+        List.of(
+        /*fieldPointsToMeters(1, 3, 0),
+        fieldPointsToMeters(2, 3, 0),
+        fieldPointsToMeters(3, 4, 90),
+        fieldPointsToMeters(3, 5, 90),
+        fieldPointsToMeters(3, 5, 270),
+        fieldPointsToMeters(3, 4, 270),
+        fieldPointsToMeters(4, 1.5, 315),
+        fieldPointsToMeters(5, 1, 0),
+        fieldPointsToMeters(6, 2, 90),
+        fieldPointsToMeters(6, 5, 90),
+        fieldPointsToMeters(6, 5, 270),
+        fieldPointsToMeters(6, 2, 270),
+        fieldPointsToMeters(7, 1, 0),
+        fieldPointsToMeters(8, 1, 0),
+        fieldPointsToMeters(9, 2, 90),
+        fieldPointsToMeters(9, 5, 90),*/
+        fieldPointsToMeters(9, 5, 90),
+        fieldPointsToMeters(9, 4, 90),
+        fieldPointsToMeters(10, 3, 180),
+        fieldPointsToMeters(11, 3, 180)
+        ),
+        configReverse);
+    
+
+    /*Trajectory lightspeedCircuitPath = 
+    TrajectoryGenerator.generateTrajectory(
+        // Start at the origin facing the +X direction
+        // Might not be used; the lightspeed Circuit Path is supposed to be maually driven
+        List.of(
+        fieldPointsToMeters(2, 9, 90),
+        fieldPointsToMeters(2, 4, 90),
+        fieldPointsToMeters(3, 5, 0),
+        fieldPointsToMeters(4, 5, 0),
+        fieldPointsToMeters(5, 4, 270),
+        fieldPointsToMeters(6, 3, 0),
+        fieldPointsToMeters(7, 3, 0),
+        fieldPointsToMeters(8, 4, 90),
+        fieldPointsToMeters(9, 5, 0),
+        fieldPointsToMeters(10, 4, 270),
+        fieldPointsToMeters(11, 3, 270),
+        fieldPointsToMeters(11, 2, 270),
+        fieldPointsToMeters(10, 1, 180),
+        fieldPointsToMeters(6, 1, 180),
+        fieldPointsToMeters(5, 2, 90),
+        fieldPointsToMeters(4, 3, 180),
+        fieldPointsToMeters(3, 3, 180),
+        fieldPointsToMeters(2, 4, 90),
+        fieldPointsToMeters(3, 5, 0),
+        fieldPointsToMeters(4, 5, 0),
+        fieldPointsToMeters(5, 4, 270),
+        fieldPointsToMeters(6, 3, 0),
+        fieldPointsToMeters(7, 3, 0),
+        fieldPointsToMeters(8, 4, 90),
+        fieldPointsToMeters(9, 5, 0),
+        fieldPointsToMeters(10, 4, 270),
+        fieldPointsToMeters(11, 3, 270),
+        fieldPointsToMeters(11, 2, 270),
+        fieldPointsToMeters(10, 1, 180),
+        fieldPointsToMeters(6, 1, 180),
+        fieldPointsToMeters(5, 2, 90),
+        fieldPointsToMeters(4, 3, 180),
+        fieldPointsToMeters(3, 3, 180),
+        fieldPointsToMeters(2, 2, 270),
+        fieldPointsToMeters(2, 1, 270)
+        ),
+        config);*/
 
     /*String trajectoryJSON = "paths/SlalomPath.wpilib.json";
     Trajectory slalom = new Trajectory();
@@ -337,12 +428,9 @@ public class RobotContainer {
     } catch (IOException ex) {
         DriverStation.reportError("Unstable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
     }*/
-
-    Trajectory traj = bouncePath;
-
-    RamseteCommand ramseteCommand =
+    RamseteCommand ramseteCommand1 =
         new RamseteCommand(
-            traj,
+            bouncePath1,
             m_drivetrain::getPose,
             new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
             new SimpleMotorFeedforward(
@@ -357,11 +445,66 @@ public class RobotContainer {
             m_drivetrain::tankDriveVolts,
             m_drivetrain);
 
+        RamseteCommand ramseteCommand2 =
+        new RamseteCommand(
+            bouncePath2,
+            m_drivetrain::getPose,
+            new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
+            new SimpleMotorFeedforward(
+                DriveConstants.ksVolts,
+                DriveConstants.kvVoltSecondsPerMeter,
+                DriveConstants.kaVoltSecondsSquaredPerMeter),
+            DriveConstants.kDriveKinematics,
+            m_drivetrain::getWheelSpeeds,
+            new PIDController(DriveConstants.kPDriveVel, 0, 0),
+            new PIDController(DriveConstants.kPDriveVel, 0, 0),
+            // RamseteCommand passes volts to the callback
+            m_drivetrain::tankDriveVolts,
+            m_drivetrain);
+
+            RamseteCommand ramseteCommand3 =
+            new RamseteCommand(
+                bouncePath3,
+                m_drivetrain::getPose,
+                new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
+                new SimpleMotorFeedforward(
+                    DriveConstants.ksVolts,
+                    DriveConstants.kvVoltSecondsPerMeter,
+                    DriveConstants.kaVoltSecondsSquaredPerMeter),
+                DriveConstants.kDriveKinematics,
+                m_drivetrain::getWheelSpeeds,
+                new PIDController(DriveConstants.kPDriveVel, 0, 0),
+                new PIDController(DriveConstants.kPDriveVel, 0, 0),
+                // RamseteCommand passes volts to the callback
+                m_drivetrain::tankDriveVolts,
+                m_drivetrain);
+
+                RamseteCommand ramseteCommand4 =
+                new RamseteCommand(
+                    bouncePath4,
+                    m_drivetrain::getPose,
+                    new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
+                    new SimpleMotorFeedforward(
+                        DriveConstants.ksVolts,
+                        DriveConstants.kvVoltSecondsPerMeter,
+                        DriveConstants.kaVoltSecondsSquaredPerMeter),
+                    DriveConstants.kDriveKinematics,
+                    m_drivetrain::getWheelSpeeds,
+                    new PIDController(DriveConstants.kPDriveVel, 0, 0),
+                    new PIDController(DriveConstants.kPDriveVel, 0, 0),
+                    // RamseteCommand passes volts to the callback
+                    m_drivetrain::tankDriveVolts,
+                    m_drivetrain);
+
+          
+
     // Reset odometry to the starting pose of the trajectory.
-    m_drivetrain.resetOdometry(traj.getInitialPose());
+    m_drivetrain.resetOdometry(bouncePath1.getInitialPose());
+
 
     // Run path following command, then stop at the end.
-    return ramseteCommand.andThen(() -> m_drivetrain.tankDriveVolts(0, 0));
+    return ramseteCommand1.andThen(ramseteCommand2).andThen(ramseteCommand3).andThen(ramseteCommand4).andThen(() -> m_drivetrain.tankDriveVolts(0, 0));
+    //return ramseteCommand1.andThen()() -> m_drivetrain.tankDriveVolts(0, 0));
   }
 
   public void resetEncoders() {
