@@ -91,16 +91,16 @@ public class RobotContainer {
     () -> m_feeder.setFeedSpeed(m_operatorController.getY(Hand.kRight)), m_feeder);
 
   private final Command m_TeleopShooter = new RunCommand(
-    () -> m_shooter.setShooterRPM(m_operatorController.getTriggerAxis(Hand.kRight) * Constants.Shooter.kMaxRPM), m_shooter);
+    () -> m_shooter.setShooterSpeed(m_operatorController.getTriggerAxis(Hand.kRight)), m_shooter);
 
   private final Command m_ShooterGreen = new RunCommand(
-    () -> m_shooter.setShooterRPM(1750), m_shooter);
+    () -> m_shooter.setShooterSpeed(0.3), m_shooter);
   private final Command m_ShooterYellow = new RunCommand(
-    () -> m_shooter.setShooterRPM(2000), m_shooter);
+    () -> m_shooter.setShooterSpeed(0.8), m_shooter);
   private final Command m_ShooterBlue = new RunCommand(
-    () -> m_shooter.setShooterRPM(3000), m_shooter);
+    () -> m_shooter.setShooterSpeed(0.43), m_shooter);
   private final Command m_ShooterRed = new RunCommand(
-    () -> m_shooter.setShooterRPM(4000), m_shooter);
+    () -> m_shooter.setShooterSpeed(0.43), m_shooter);
 
   private final Command m_TeleopSlideIn = new RunCommand(
     () -> m_slide.actuateIn(), m_slide);
@@ -165,20 +165,22 @@ public class RobotContainer {
         new JoystickButton(m_driverLeftJoystick, 1).whenPressed(m_TeleopSlideIn);
     
     //Operator Configs
-        new JoystickButton(m_operatorController, XboxController.Button.kY.value).whenPressed(m_SpinnerUp);
-        new JoystickButton(m_operatorController, XboxController.Button.kX.value).whenPressed(m_SpinnerDown);
-        new JoystickButton(m_operatorController, XboxController.Button.kA.value).whenPressed(m_TeleopSlideIn);
-        new JoystickButton(m_operatorController, XboxController.Button.kB.value).whenPressed(m_TeleopSlideOut);
+        //new JoystickButton(m_operatorController, XboxController.Button.kY.value).whenPressed(m_SpinnerUp);
+        //new JoystickButton(m_operatorController, XboxController.Button.kX.value).whenPressed(m_SpinnerDown);
+        //new JoystickButton(m_operatorController, XboxController.Button.kA.value).whenPressed(m_TeleopSlideIn);
+        //new JoystickButton(m_operatorController, XboxController.Button.kB.value).whenPressed(m_TeleopSlideOut);
+        new JoystickButton(m_operatorController, XboxController.Button.kBack.value).whenPressed(m_TeleopSlideIn);
+        new JoystickButton(m_operatorController, XboxController.Button.kStart.value).whenPressed(m_TeleopSlideOut);
     
         new JoystickButton(m_operatorController, XboxController.Button.kBumperLeft.value).whileHeld(m_SpinnerSpinL);
         new JoystickButton(m_operatorController, XboxController.Button.kBumperLeft.value).whenReleased(m_SpinnerStop);
         new JoystickButton(m_operatorController, XboxController.Button.kBumperRight.value).whileHeld(m_SpinnerSpinR);
         new JoystickButton(m_operatorController, XboxController.Button.kBumperRight.value).whenReleased(m_SpinnerStop);
     
-        new JoystickButton(m_driverRightJoystick, 7).whileHeld(m_ShooterGreen);
-        new JoystickButton(m_driverRightJoystick, 8).whileHeld(m_ShooterYellow);
-        new JoystickButton(m_driverRightJoystick, 9).whileHeld(m_ShooterBlue);
-        new JoystickButton(m_driverRightJoystick, 10).whileHeld(m_ShooterRed);
+        new JoystickButton(m_operatorController, XboxController.Button.kA.value).whileHeld(m_ShooterGreen);
+        new JoystickButton(m_operatorController, XboxController.Button.kY.value).whileHeld(m_ShooterYellow);
+        new JoystickButton(m_operatorController, XboxController.Button.kX.value).whileHeld(m_ShooterBlue);
+        new JoystickButton(m_operatorController, XboxController.Button.kB.value).whileHeld(m_ShooterRed);
   }
 
   private Pose2d fieldPointsToMeters(double xFieldPoints, double yFieldPoints, double rotationDegrees) {

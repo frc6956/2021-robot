@@ -32,7 +32,7 @@ public class Shooter extends SubsystemBase {
 
       m_right.setInverted(true);
 
-      double p = 0.8;
+      double p = 0.7;
       m_left.config_kP(0, p);
       m_right.config_kP(0, p);
 
@@ -48,8 +48,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setShooterSpeed(double speed) {
-    m_left.set(speed);
-    m_right.set(speed);
+    m_left.setVoltage(speed * 10);
+    m_right.setVoltage(speed * 10);
   }
 
   public void setShooterRPM(double rpm) {
