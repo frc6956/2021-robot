@@ -51,8 +51,8 @@ public class BouncePath extends SequentialCommandGroup {
       List.of(
         PathCommand.fieldPointsToMeters(9, 5, 90),
         PathCommand.fieldPointsToMeters(9, 4, 90),
-        PathCommand.fieldPointsToMeters(10, 3, 180),
-        PathCommand.fieldPointsToMeters(11, 3, 180)
+        PathCommand.fieldPointsToMeters(10, 3.5, 180),
+        PathCommand.fieldPointsToMeters(11, 3.5, 180)
       ),
       PathCommand.reverseConfig));
 

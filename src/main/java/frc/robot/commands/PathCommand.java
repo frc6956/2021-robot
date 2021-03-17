@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.util.List;
+
 import edu.wpi.first.wpilibj.controller.*;
 import edu.wpi.first.wpilibj.geometry.*;
 import edu.wpi.first.wpilibj.trajectory.*;
@@ -25,6 +27,11 @@ public class PathCommand extends RamseteCommand {
       DriveConstants.kDriveKinematics,
       10);
 
+    private static TrajectoryConstraint autonCentripConstraint =
+      new CentripetalAccelerationConstraint(1);
+
+  
+  
   // Create config for trajectory
   protected static TrajectoryConfig forwardConfig =
     new TrajectoryConfig(
@@ -33,7 +40,7 @@ public class PathCommand extends RamseteCommand {
       // Add kinematics to ensure max speed is actually obeyed
       .setKinematics(DriveConstants.kDriveKinematics)
       // Apply the voltage constraint
-      .addConstraint(autoVoltageConstraint)
+      .addConstraints(List.of(autoVoltageConstraint, autonCentripConstraint))
       .setReversed(false);
 
   // Create config for trajectory
@@ -44,7 +51,7 @@ public class PathCommand extends RamseteCommand {
       // Add kinematics to ensure max speed is actually obeyed
       .setKinematics(DriveConstants.kDriveKinematics)
       // Apply the voltage constraint
-      .addConstraint(autoVoltageConstraint)
+      .addConstraints(List.of(autoVoltageConstraint, autonCentripConstraint))
       .setReversed(true);
 
   /** Creates a new PathCommandBase. */
