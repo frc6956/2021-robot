@@ -83,9 +83,13 @@ public class RobotContainer {
      //Operator
   private final Command m_TeleopIntake  = new RunCommand(
     () -> m_intake.setIntakeSpeed(-m_operatorController.getY(Hand.kLeft)), m_intake);
+  private final Command m_AutoIntake  = new RunCommand(
+    () -> m_intake.setIntakeSpeed(0.5), m_intake);
 
   private final Command m_TeleopConveyor = new RunCommand(
     () -> m_conveyor.setConveyorSpeed(m_operatorController.getY(Hand.kLeft)), m_conveyor);
+  private final Command m_AutoConveyor = new RunCommand(
+    () -> m_conveyor.setConveyorSpeed(-0.5), m_conveyor);
 
   private final Command m_TeleopFeeder = new RunCommand(
     () -> m_feeder.setFeedSpeed(m_operatorController.getY(Hand.kRight)), m_feeder);
@@ -106,6 +110,8 @@ public class RobotContainer {
     () -> m_slide.actuateIn(), m_slide);
 
   private final Command m_TeleopSlideOut = new RunCommand(
+    () -> m_slide.actuateOut(), m_slide);
+  private final Command m_AutoSlideOut = new RunCommand(
     () -> m_slide.actuateOut(), m_slide);
 
   private final Command m_SpinnerUp = new RunCommand(
@@ -189,7 +195,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new BouncePath(m_drivetrain);
+    return new ParallelCommandGroup(m_AutoSlideOut, m_AutoIntake, m_AutoConveyor, new GalacticSearchB(m_drivetrain));
   }
 
   public void resetEncoders() {
