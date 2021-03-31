@@ -104,7 +104,7 @@ public class RobotContainer {
   private final Command m_ShooterBlue = new RunCommand(
     () -> m_shooter.setShooterSpeed(0.43), m_shooter);
   private final Command m_ShooterRed = new RunCommand(
-    () -> m_shooter.setShooterSpeed(0.43), m_shooter);
+    () -> m_shooter.setShooterSpeed(0.46), m_shooter);
 
   private final Command m_TeleopSlideIn = new RunCommand(
     () -> m_slide.actuateIn(), m_slide);
@@ -165,10 +165,12 @@ public class RobotContainer {
         //new JoystickButton(m_driverLeftJoystick, 5).whenPressed(m_driverSwitchHigh);
         //new JoystickButton(m_driverRightJoystick, 6).whenPressed(m_driverSwitchLow);
         new JoystickButton(m_driverRightJoystick, 6).whenPressed(m_driverSwitchHigh);
-        
+        new JoystickButton(m_driverLeftJoystick, 7).whenPressed(m_driverSwitchHigh);
+        new JoystickButton(m_driverLeftJoystick, 7).whenReleased(m_driverSwitchLow);
         new JoystickButton(m_driverRightJoystick, 6).whenReleased(m_driverSwitchLow);
-        new JoystickButton(m_driverRightJoystick, 1).whenPressed(m_invertDrive);
+        new JoystickButton(m_driverRightJoystick, 5).whenPressed(m_invertDrive);
         new JoystickButton(m_driverLeftJoystick, 1).whenPressed(m_TeleopSlideIn);
+        new JoystickButton(m_driverLeftJoystick, 9).whenPressed(m_driverSwitchHigh);
     
     //Operator Configs
         //new JoystickButton(m_operatorController, XboxController.Button.kY.value).whenPressed(m_SpinnerUp);
@@ -187,6 +189,9 @@ public class RobotContainer {
         new JoystickButton(m_operatorController, XboxController.Button.kY.value).whileHeld(m_ShooterYellow);
         new JoystickButton(m_operatorController, XboxController.Button.kX.value).whileHeld(m_ShooterBlue);
         new JoystickButton(m_operatorController, XboxController.Button.kB.value).whileHeld(m_ShooterRed);
+
+        new JoystickButton(m_driverLeftJoystick, 5).whenPressed(m_splitArcadeJoystick);
+        new JoystickButton(m_driverLeftJoystick, 6).whenPressed(m_tankJoystick);
   }
 
   /**
@@ -195,7 +200,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new ParallelCommandGroup(m_AutoSlideOut, m_AutoIntake, m_AutoConveyor, new GalacticSearchB(m_drivetrain));
+    //return new ParallelCommandGroup(m_AutoSlideOut, m_AutoIntake, m_AutoConveyor, new GalacticSearchB(m_drivetrain));
+    return new BarrelRacingPath(m_drivetrain);
   }
 
   public void resetEncoders() {
